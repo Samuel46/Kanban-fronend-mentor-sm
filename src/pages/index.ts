@@ -11,13 +11,13 @@ export default function Index() {
 
 	useEffect(() => {
 		if (pathname === PATH_KANBAN.root) {
-			replace(PATH_KANBAN.platformLaunch);
+			replace(PATH_KANBAN.kanban);
 		}
 		/* eslint-disable react-hooks/exhaustive-deps */
 	}, [pathname]);
 
 	useEffect(() => {
-		prefetch(PATH_KANBAN.platformLaunch);
+		prefetch(PATH_KANBAN.kanban);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return null;

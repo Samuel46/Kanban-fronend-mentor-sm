@@ -1,18 +1,19 @@
 // @mui
-import { Divider, Menu, MenuItem, useTheme } from "@mui/material";
+import { Divider, Menu, useTheme } from "@mui/material";
 import { Toolbar, Typography, IconButton, AppBar, Box } from "@mui/material";
 // @mui@icons
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 // common components
-import Button from "@common/components/button";
 import useResponsive from "@common/hooks/useResponsive";
 import Logo from "@common/components/logo";
 // config
 import { HEADER, NAV } from "src/config";
-import AddNewTask from "@component/platform-launch/modals/AddNewTask";
+import { AddNewTask, DeleteBoard } from "@component/board-details/modals";
 import { useState } from "react";
 import { pxToRem } from "src/theme/typography";
-import { useSettingsContext } from "@common/components/settings";
+import EditBoard from "@component/board-details/modals/EditBaord";
+import { RootState, useSelector } from "@redux/store";
+import { useRouter } from "next/router";
 
 type Props = {
 	open: boolean;
@@ -21,8 +22,15 @@ type Props = {
 export default function Header({ open }: Props) {
 	const theme = useTheme();
 	const color = theme.palette;
+	const router = useRouter();
 
-	const { themeMode } = useSettingsContext();
+	const { query } = router;
+
+	const { id: currentBoardId } = query;
+
+	const { boards } = useSelector((state: RootState) => state.board);
+
+	const currentBoard = boards?.find((board) => board._id === currentBoardId);
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const openn = Boolean(anchorEl);
@@ -68,8 +76,8 @@ export default function Header({ open }: Props) {
 					</>
 				)}
 
-				<Typography variant="h1" sx={{ flexGrow: 1, marginLeft: !open ? 3 : 0 }}>
-					Platform Launch
+				<Typography variant="h1" sx={{ flexGrow: 1, marginLeft: !open ? 3 : 0, textTransform: "capitalize" }}>
+					{currentBoard?.name}
 				</Typography>
 
 				<AddNewTask />
@@ -90,6 +98,7 @@ export default function Header({ open }: Props) {
 						PaperProps={{
 							style: {
 								width: pxToRem(192),
+								background: theme.palette.background.paper,
 								minHeight: pxToRem(92),
 								boxShadow: "0px 10px 20px rgba(54, 78, 126, 0.25)",
 								borderRadius: pxToRem(8),
@@ -97,30 +106,8 @@ export default function Header({ open }: Props) {
 							},
 						}}
 					>
-						<MenuItem
-							onClick={handleClose}
-							sx={{
-								typography: "body2",
-								color: theme.palette.grey[500],
-								lineHeight: pxToRem(23),
-								fontWeight: 500,
-								fontSize: pxToRem(13),
-							}}
-						>
-							Edit Board
-						</MenuItem>
-						<MenuItem
-							onClick={handleClose}
-							sx={{
-								typography: "body2",
-								color: theme.palette.error.main,
-								lineHeight: pxToRem(23),
-								fontWeight: 500,
-								fontSize: pxToRem(13),
-							}}
-						>
-							Delete Board
-						</MenuItem>
+						<EditBoard />
+						<DeleteBoard handleCloseMenu={handleClose} />
 					</Menu>
 				</div>
 			</Toolbar>
