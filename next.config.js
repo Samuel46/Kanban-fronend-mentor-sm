@@ -3,7 +3,7 @@ const nextConfig = {
 	reactStrictMode: true,
 	env: {
 		// HOST
-		HOST_API_KEY: "https://kanban-frontend-mentor-backend-production.up.railway.app/",
+		HOST_API_KEY: "http://kanban-frontend-mentor-backend-production.up.railway.app/",
 	},
 };
 
