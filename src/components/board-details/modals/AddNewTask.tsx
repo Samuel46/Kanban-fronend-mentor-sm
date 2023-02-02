@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 // typography
 import { pxToRem } from "src/theme/typography";
 // @mui
-import { MenuItem, Stack, Dialog, DialogContent, DialogTitle, FormControl, Box } from "@mui/material";
+import { MenuItem, Stack, Dialog, DialogContent, DialogTitle, FormControl, Box, IconButton, useTheme } from "@mui/material";
 // components
 import Label from "@common/components/label/Label";
 import Button from "@common/components/button";
@@ -35,6 +35,8 @@ type FormValuesProps = {
 
 export default function AddNewTask() {
 	const [open, setOpen] = useState(false);
+
+	const theme = useTheme();
 
 	const router = useRouter();
 
@@ -95,9 +97,28 @@ export default function AddNewTask() {
 
 	return (
 		<div>
-			<Button disabled={!currentBoardId} onClick={handleClickOpen}>
-				{isPhone ? <img src="../icons/+.svg" alt="ss" /> : "+ Add New Task"}
-			</Button>
+			{isPhone ? (
+				<IconButton
+					disabled={!currentBoardId}
+					onClick={handleClickOpen}
+					sx={{
+						width: pxToRem(48),
+						background: theme.palette.primary.main,
+						height: pxToRem(32),
+						borderRadius: pxToRem(24),
+						"&:hover": {
+							background: theme.palette.primary.btnHover,
+						},
+					}}
+				>
+					<img src="../icons/+.svg" alt="plus" />
+				</IconButton>
+			) : (
+				<Button disabled={!currentBoardId} onClick={handleClickOpen}>
+					+ Add New Task
+				</Button>
+			)}
+
 			{/* TODO: overwrite dialog component, to extend the new maxwidth xs */}
 			<Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
 				<DialogTitle sx={{ mt: pxToRem(16) }}>Add New Task</DialogTitle>

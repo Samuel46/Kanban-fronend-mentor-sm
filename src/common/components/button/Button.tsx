@@ -1,6 +1,7 @@
 import { Button as MuiButton, useTheme } from "@mui/material";
 import { ReactElement } from "react";
 import { pxToRem } from "src/theme/typography";
+import { useSettingsContext } from "../settings";
 
 type Props = {
 	children: ReactElement | string;
@@ -15,6 +16,8 @@ type Props = {
 export default function Button({ children, buttonType = "primary", sx, onClick, fullWidth, type = "button", disabled }: Props) {
 	const theme = useTheme();
 	const color = theme.palette;
+
+	const { themeMode } = useSettingsContext();
 
 	return (
 		<MuiButton
@@ -47,10 +50,11 @@ export default function Button({ children, buttonType = "primary", sx, onClick, 
 
 				...(buttonType === "secondary" && {
 					color: color.secondary.btnText,
-					background: color.secondary.btn,
+					background: themeMode === "dark" ? color.secondary.light : color.secondary.btn,
 					"&:hover": {
-						backgroundColor: color.secondary.btnHover,
-						boxShadow: "none",
+						color: color.primary.main,
+						background: themeMode === "dark" ? color.secondary.light : color.secondary.btnHover,
+						marginRight: theme.spacing(2.4),
 					},
 				}),
 				...(buttonType === "error" && {

@@ -39,6 +39,13 @@ export const StyledItem = styled(ListItemButton, {
 		borderBottomRightRadius: 100,
 		marginRight: 20,
 
+		"&:hover": {
+			...(!isLight && {
+				backgroundColor: theme.palette.secondary.light,
+				color: theme.palette.primary.main,
+			}),
+		},
+
 		// Active item
 		...(active && {
 			...activeStyle,

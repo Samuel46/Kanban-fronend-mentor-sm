@@ -4,9 +4,15 @@ import { RootState, useSelector } from "@redux/store";
 import { pxToRem } from "src/theme/typography";
 import BoardHeader from "./BoardHeader";
 import ViewTask from "./modals/ViewTask";
-import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 
-export default function BoardColumn({ data, tasks }: { data: any; tasks: any }) {
+type Column = {
+	name: string;
+	_id?: string;
+	prioritize: string;
+};
+
+export default function BoardColumn({ data }: { data: Column }) {
+	const { tasks } = useSelector((state: RootState) => state.task);
 	const currentTasks = tasks?.filter((board) => board?.status === data?._id);
 
 	return (
@@ -15,14 +21,7 @@ export default function BoardColumn({ data, tasks }: { data: any; tasks: any }) 
 
 			<Stack spacing={pxToRem(20)}>
 				{currentTasks?.map((task, index) => (
-					<Droppable droppableId={task?.status as string} direction="horizontal" key={task._id}>
-						{(provided) => (
-							<div {...provided.droppableProps} ref={provided.innerRef} style={{ border: "1px solid red" }}>
-								<ViewTask task={task} index={index} />
-								{provided.placeholder}
-							</div>
-						)}
-					</Droppable>
+					<ViewTask task={task} index={index} key={task._id} />
 				))}
 			</Stack>
 		</Box>

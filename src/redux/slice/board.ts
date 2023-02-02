@@ -23,13 +23,11 @@ interface BoardState {
 	boards: Board[];
 	error: string | null;
 	board: Board | null;
-	columnsOrder: string[];
 }
 
 const initialState: BoardState = {
 	name: "",
 	columns: [],
-	columnsOrder: [],
 	isLoading: false,
 	boards: [],
 	board: null,
@@ -57,15 +55,6 @@ const boardSlice = createSlice({
 
 			state.board = action.payload;
 			state.boards?.push(action.payload);
-		},
-
-		persistColumn(state, action) {
-			state.columnsOrder = action.payload;
-		},
-
-		persistTask(state, action) {
-			const columns = action.payload;
-			state.columns = columns;
 		},
 
 		// RESET BOARD
@@ -111,8 +100,6 @@ export const {
 	updateBoardSuccess,
 	deleteBoardSuccess,
 	resetBoardSuccess,
-	persistColumn,
-	persistTask,
 } = boardSlice.actions;
 
 // ---------------------------------------------------------------------
@@ -150,24 +137,6 @@ export const createBoard = (name: string, columns: Column[]) => async (dispatch:
 				})
 			);
 		});
-	}
-};
-
-// Persist column order
-export const persistColumnOrder = (newColumnOrder: string[]) => async (dispatch: AppDispatch) => {
-	try {
-		dispatch(persistColumn(newColumnOrder));
-	} catch (error) {
-		dispatch(hasError(error?.errors));
-	}
-};
-
-// Persist task order
-export const persistTaskOrder = (newTaskOrder: string[]) => async (dispatch: AppDispatch) => {
-	try {
-		dispatch(persistTask(newTaskOrder));
-	} catch (error) {
-		dispatch(hasError(error?.errors));
 	}
 };
 

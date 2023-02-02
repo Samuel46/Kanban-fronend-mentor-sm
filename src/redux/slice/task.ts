@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "src/utils/axios";
 
 import { AppDispatch, RootState } from "../store";
-import { getAllBoards } from "./board";
 
 type Subtasks = {
 	title: string;
@@ -176,8 +175,6 @@ export const updatedTask =
 					options: { variant: "success", key: new Date().getTime() + Math.random() },
 				})
 			);
-			dispatch(getAllTasks());
-			dispatch(getAllBoards());
 		} catch (error) {
 			dispatch(hasError(error?.errors));
 			error?.errors?.forEach((error: { message: string }, index: number) => {

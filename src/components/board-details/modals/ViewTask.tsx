@@ -25,7 +25,6 @@ import { useRouter } from "next/router";
 import DeleteTask from "./DeleteTask";
 import { MenuNav } from "@common/components/menu";
 import EditTask from "./EditTask";
-import { Draggable } from "react-beautiful-dnd";
 
 type Subtasks = {
 	title: string;
@@ -81,40 +80,34 @@ export default function ViewTask({ task, index }: Props) {
 
 	return (
 		<>
-			<Draggable draggableId={task?._id as any} index={index}>
-				{(provided) => (
-					<Card
-						{...provided.draggableProps}
-						{...provided.dragHandleProps}
-						ref={provided.innerRef}
-						onClick={handleClickOpen}
-						sx={{
-							p: 2,
-							borderRadius: pxToRem(8),
-							bgcolor: "background.paper",
-							transition: theme.transitions.create("all"),
-							cursor: "pointer",
-							boxShadow: "0px 4px 6px rgba(54, 78, 126, 0.101545);",
-							"&:hover": {
-								transform: "scale(.97)",
-								color: theme.palette.primary.main,
-							},
+			<Card
+				onClick={handleClickOpen}
+				sx={{
+					p: 2,
+					borderRadius: pxToRem(8),
+					bgcolor: "background.paper",
+					transition: theme.transitions.create("all"),
+					cursor: "pointer",
+					boxShadow: "0px 4px 6px rgba(54, 78, 126, 0.101545);",
+					"&:hover": {
+						transform: "scale(.97)",
+						color: theme.palette.primary.main,
+					},
 
-							"&:last-child": {
-								mb: 5,
-							},
-						}}
-						key={task._id}
-					>
-						<Typography variant="body1" fontWeight="600" mb={2}>
-							{task.title}
-						</Typography>
-						<Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-							0 of {task.subtasks.length} substasks
-						</Typography>
-					</Card>
-				)}
-			</Draggable>
+					"&:last-child": {
+						mb: 5,
+					},
+				}}
+				key={task._id}
+			>
+				<Typography variant="body1" fontWeight="600" mb={2}>
+					{task.title}
+				</Typography>
+				<Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
+					0 of {task.subtasks.length} substasks
+				</Typography>
+			</Card>
+
 			{/* TODO: overwrite dialog component, to extend the new maxwidth xs */}
 			<Dialog open={openTask} onClose={handleClose} fullWidth maxWidth="sm">
 				<DialogTitle sx={{ mt: pxToRem(20) }}>{task?.title}</DialogTitle>

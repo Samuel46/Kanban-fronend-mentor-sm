@@ -45,7 +45,7 @@ export default function KanbanLayout({ children }: Props) {
 
 	return (
 		<>
-			<Header open={open} />
+			<Header open={open} handleToggle={handleToggle} />
 			<Box
 				sx={{
 					display: { lg: "flex" },
