@@ -1,31 +1,58 @@
 // @mui
-import { Divider, Menu, MenuItem, useTheme } from "@mui/material";
+import { Divider, Menu, Stack, useTheme } from "@mui/material";
 import { Toolbar, Typography, IconButton, AppBar, Box } from "@mui/material";
+import Grow from "@mui/material/Grow";
 // @mui@icons
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 // common components
-import Button from "@common/components/button";
 import useResponsive from "@common/hooks/useResponsive";
 import Logo from "@common/components/logo";
 // config
 import { HEADER, NAV } from "src/config";
-import AddNewTask from "@component/platform-launch/modals/AddNewTask";
+import { AddNewBoard, AddNewTask, DeleteBoard } from "@component/board-details/modals";
 import { useState } from "react";
 import { pxToRem } from "src/theme/typography";
-import { useSettingsContext } from "@common/components/settings";
+import EditBoard from "@component/board-details/modals/EditBaord";
+import { RootState, useSelector } from "@redux/store";
+import { useRouter } from "next/router";
+import Iconify from "@common/components/iconify/Iconify";
+import { StyledSubheader } from "@common/components/nav-section/styles";
+import NavSectionVertical from "@common/components/nav-section/NavSectionVertical";
+import NavSwitch from "../nav/NavSwitch";
+import { MobileMenu } from "@component/mobile-menu";
 
 type Props = {
 	open: boolean;
+	handleToggle: () => void;
 };
 
-export default function Header({ open }: Props) {
+export default function Header({ open, handleToggle }: Props) {
 	const theme = useTheme();
 	const color = theme.palette;
+	const router = useRouter();
 
-	const { themeMode } = useSettingsContext();
+	const { query } = router;
+
+	const { id: currentBoardId } = query;
+
+	const { boards } = useSelector((state: RootState) => state.board);
+
+	const currentBoard = boards?.find((board) => board._id === currentBoardId);
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 	const openn = Boolean(anchorEl);
+
+	const [boardEl, setBoardEl] = useState<null | HTMLElement>(null);
+
+	const openBoard = Boolean(boardEl);
+
+	const handleBoardClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setBoardEl(event.currentTarget);
+	};
+
+	const handleBoardClose = () => {
+		setBoardEl(null);
+	};
 
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -34,7 +61,9 @@ export default function Header({ open }: Props) {
 		setAnchorEl(null);
 	};
 
-	const isDesktop = useResponsive("up", "lg");
+	const isDesktop = useResponsive("up", "md");
+	const isTablet = useResponsive("down", "md");
+	const isPhone = useResponsive("down", "sm");
 
 	return (
 		<AppBar
@@ -43,6 +72,15 @@ export default function Header({ open }: Props) {
 				zIndex: theme.zIndex.appBar + 1,
 				...(isDesktop && {
 					width: open ? `calc(100% - ${NAV.W_DASHBOARD + 1}px)` : "100%",
+					height: HEADER.H_DASHBOARD_DESKTOP,
+				}),
+
+				...(isTablet && {
+					width: open ? `calc(100% - ${NAV.W_BASE + 1}px)` : "100%",
+					height: HEADER.H_DASHBOARD_DESKTOP,
+				}),
+				...(isPhone && {
+					width: "100%",
 					height: HEADER.H_DASHBOARD_DESKTOP,
 				}),
 
@@ -68,9 +106,28 @@ export default function Header({ open }: Props) {
 					</>
 				)}
 
-				<Typography variant="h1" sx={{ flexGrow: 1, marginLeft: !open ? 3 : 0 }}>
-					Platform Launch
-				</Typography>
+				{isPhone && (
+					<MobileMenu
+						handleToggle={handleToggle}
+						boardEl={boardEl}
+						openBoard={openBoard}
+						handleBoardClick={handleBoardClick}
+						handleBoardClose={handleBoardClose}
+						currentBoard={currentBoard}
+					/>
+				)}
+
+				{isDesktop && (
+					<Typography variant="h1" sx={{ flexGrow: 1, marginLeft: !open ? 3 : 0, textTransform: "capitalize" }}>
+						{currentBoard?.name}
+					</Typography>
+				)}
+
+				{isTablet && !isPhone && (
+					<Typography variant="h1" sx={{ flexGrow: 1, marginLeft: !open ? 3 : 0, textTransform: "capitalize" }}>
+						{currentBoard?.name}
+					</Typography>
+				)}
 
 				<AddNewTask />
 
@@ -90,6 +147,7 @@ export default function Header({ open }: Props) {
 						PaperProps={{
 							style: {
 								width: pxToRem(192),
+								background: theme.palette.background.paper,
 								minHeight: pxToRem(92),
 								boxShadow: "0px 10px 20px rgba(54, 78, 126, 0.25)",
 								borderRadius: pxToRem(8),
@@ -97,30 +155,8 @@ export default function Header({ open }: Props) {
 							},
 						}}
 					>
-						<MenuItem
-							onClick={handleClose}
-							sx={{
-								typography: "body2",
-								color: theme.palette.grey[500],
-								lineHeight: pxToRem(23),
-								fontWeight: 500,
-								fontSize: pxToRem(13),
-							}}
-						>
-							Edit Board
-						</MenuItem>
-						<MenuItem
-							onClick={handleClose}
-							sx={{
-								typography: "body2",
-								color: theme.palette.error.main,
-								lineHeight: pxToRem(23),
-								fontWeight: 500,
-								fontSize: pxToRem(13),
-							}}
-						>
-							Delete Board
-						</MenuItem>
+						<EditBoard />
+						<DeleteBoard handleCloseMenu={handleClose} />
 					</Menu>
 				</div>
 			</Toolbar>

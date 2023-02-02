@@ -7,18 +7,20 @@ import NavSectionVertical from "@common/components/nav-section/NavSectionVertica
 // hooks
 import useResponsive from "@common/hooks/useResponsive";
 //
-import AddNewBoard from "@component/platform-launch/modals/AddNewBoard";
+import { AddNewBoard } from "@component/board-details/modals";
 
 // @mui
 import { Box, Drawer, Stack, useTheme } from "@mui/material";
+import { RootState } from "@redux/store";
+import { useSelector } from "react-redux";
 
 // config
 import { NAV } from "src/config";
+import { PATH_KANBAN } from "src/routes/path";
 
 //
-import navConfig from "./config";
+
 import NavSwitch from "./NavSwitch";
-import NavToggle from "./NavToggle";
 
 type Props = {
 	openNav: boolean;
@@ -29,6 +31,20 @@ type Props = {
 export default function NavVertical({ openNav, onCloseNav, handleToggle }: Props) {
 	const theme = useTheme();
 	const color = theme.palette;
+
+	const { boards, isLoading } = useSelector((state: RootState) => state.board);
+
+	const navConfig = [
+		{
+			// kanban
+			subheader: "All Boards",
+			items: boards.map((item) => ({
+				title: item.name,
+				path: `/kanban/${item._id}`,
+				icon: <Iconify icon="tabler:layout-board-split" />,
+			})),
+		},
+	];
 
 	const isDesktop = useResponsive("up", "sm");
 
@@ -47,7 +63,6 @@ export default function NavVertical({ openNav, onCloseNav, handleToggle }: Props
 
 			<Box sx={{ flexGrow: 1 }} />
 			<NavSwitch handleToggle={handleToggle} />
-			{/* <NavToggle handleToggle={handleToggle} /> */}
 		</Box>
 	);
 

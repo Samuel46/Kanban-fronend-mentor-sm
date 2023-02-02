@@ -17,8 +17,12 @@ type Props = {
 };
 
 export default function Main({ children, sx, handleToggle, open, ...others }: Props) {
-	const isDesktop = useResponsive("up", "lg");
 	const theme = useTheme();
+
+	const isDesktop = useResponsive("up", "lg");
+	const isLaptop = useResponsive("up", "md");
+	const isTablet = useResponsive("down", "md");
+	const isPhone = useResponsive("down", "sm");
 
 	return (
 		<Box
@@ -26,11 +30,25 @@ export default function Main({ children, sx, handleToggle, open, ...others }: Pr
 			sx={{
 				flexGrow: 1,
 				py: `${HEADER.H_MOBILE + SPACING}px`,
+				px: 2,
 
 				...(isDesktop && {
-					px: 2,
 					py: `${HEADER.H_DASHBOARD_DESKTOP + SPACING}px`,
 					width: `calc(100% - ${NAV.W_DASHBOARD}px)`,
+				}),
+				...(isLaptop &&
+					!isDesktop && {
+						py: `${HEADER.H_DASHBOARD_DESKTOP + SPACING}px`,
+						width: `calc(100% - ${NAV.W_DASHBOARD}px)`,
+						marginLeft: open ? `${NAV.W_DASHBOARD}px` : 0,
+					}),
+				...(isTablet && {
+					py: `${HEADER.H_DASHBOARD_DESKTOP + SPACING}px`,
+					marginLeft: open ? `${NAV.W_BASE}px` : 0,
+				}),
+				...(isPhone && {
+					py: `${HEADER.H_MOBILE + SPACING}px`,
+					marginLeft: 0,
 				}),
 				"@keyframes slideOut": {
 					"0%": {

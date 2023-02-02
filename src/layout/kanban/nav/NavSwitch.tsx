@@ -2,6 +2,7 @@
 import Iconify from "@common/components/iconify/Iconify";
 
 import Switch from "@common/components/switch/Switch";
+import useResponsive from "@common/hooks/useResponsive";
 // mui
 import { Box, Stack, useTheme } from "@mui/material";
 // typography
@@ -14,6 +15,7 @@ type Props = {
 
 export default function NavSwitch({ handleToggle }: Props) {
 	const theme = useTheme();
+	const isPhone = useResponsive("down", "sm");
 
 	return (
 		<Stack spacing={2} mb={pxToRem(36)}>
@@ -43,7 +45,7 @@ export default function NavSwitch({ handleToggle }: Props) {
 					<Iconify icon="ph:sun-fill" width={"10%"} />
 				</Stack>
 			</Box>
-			<NavToggle handleToggle={handleToggle} />
+			{!isPhone && <NavToggle handleToggle={handleToggle} />}
 		</Stack>
 	);
 }

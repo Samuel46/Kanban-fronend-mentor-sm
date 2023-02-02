@@ -5,11 +5,16 @@ import { CacheProvider, EmotionCache } from "@emotion/react";
 // next
 import { NextPage } from "next";
 import Head from "next/head";
+// redux
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "@redux/store";
 // utils
 import createEmotionCache from "../utils/createEmotionCache";
 // theme
 import ThemeProvider from "../theme";
 import { SettingsProvider } from "@common/components/settings";
+// components
+import SnackbarProvider from "@common/components/snackbar/Snackbar";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -30,10 +35,13 @@ export default function App({ Component, pageProps, emotionCache = clientSideEmo
 			<Head>
 				<meta name="viewport" content="initial-scale=1, width=device-width" />
 			</Head>
-
-			<SettingsProvider>
-				<ThemeProvider>{getLayout(<Component {...pageProps} />)}</ThemeProvider>
-			</SettingsProvider>
+			<ReduxProvider store={store}>
+				<SettingsProvider>
+					<ThemeProvider>
+						<SnackbarProvider>{getLayout(<Component {...pageProps} />)}</SnackbarProvider>
+					</ThemeProvider>
+				</SettingsProvider>
+			</ReduxProvider>
 		</CacheProvider>
 	);
 }
