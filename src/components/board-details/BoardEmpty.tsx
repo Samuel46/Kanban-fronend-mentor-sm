@@ -27,7 +27,12 @@ export default function BoardEmpty() {
 			}}
 		>
 			<Stack spacing={3} alignItems="center" justifyContent="center">
-				<Typography variant="h6" textAlign="center">
+				<Typography
+					sx={{
+						typography: { sm: "body2", md: "h6" },
+					}}
+					textAlign="center"
+				>
 					This board is empty. Create a new column to get started.
 				</Typography>
 				<Button onClick={handleClickOpen}>+ Add New Column</Button>
