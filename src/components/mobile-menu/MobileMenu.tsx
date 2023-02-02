@@ -1,5 +1,6 @@
 import Iconify from "@common/components/iconify/Iconify";
 import NavSectionVertical from "@common/components/nav-section/NavSectionVertical";
+import { useSettingsContext } from "@common/components/settings";
 import { AddNewBoard } from "@component/board-details/modals";
 import { Box, IconButton, Menu, Stack, Typography, useTheme } from "@mui/material";
 import { RootState, useSelector } from "@redux/store";
@@ -42,6 +43,8 @@ export default function MobileMenu({
 
 	const { boards } = useSelector((state: RootState) => state.board);
 
+	const { themeMode } = useSettingsContext();
+
 	const navConfig = [
 		{
 			// kanban
@@ -66,7 +69,11 @@ export default function MobileMenu({
 					fontSize={pxToRem(18)}
 					fontWeight={700}
 					lineHeight={pxToRem(23)}
-					sx={{ display: "flex", alignItems: "center", color: theme.palette.common.black }}
+					sx={{
+						display: "flex",
+						alignItems: "center",
+						color: themeMode === "light" ? theme.palette.common.black : theme.palette.common.white,
+					}}
 				>
 					{currentBoard?.name}
 
