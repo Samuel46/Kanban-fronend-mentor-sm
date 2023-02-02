@@ -20,13 +20,16 @@ export default function BoardEmpty() {
 			sx={{
 				display: "grid",
 				placeItems: "center",
+
 				flex: 1,
 				height: "100%",
 				color: (theme) => theme.palette.grey[500],
 			}}
 		>
-			<Stack spacing={3} alignItems="center">
-				<Typography fontSize={pxToRem(18)}>This board is empty. Create a new column to get started.</Typography>
+			<Stack spacing={3} alignItems="center" justifyContent="center">
+				<Typography variant="h6" textAlign="center">
+					This board is empty. Create a new column to get started.
+				</Typography>
 				<Button onClick={handleClickOpen}>+ Add New Column</Button>
 			</Stack>
 
