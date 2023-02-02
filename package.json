@@ -36,10 +36,6 @@
 		"typescript": "4.9.4",
 		"yup": "^0.32.11"
 	},
-	"proxy": {
-		"target": "http://localhost:3000",
-		"changeOrigin": true
-	},
 	"devDependencies": {
 		"@types/react-beautiful-dnd": "^13.1.3"
 	}
