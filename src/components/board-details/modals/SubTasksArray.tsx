@@ -46,7 +46,7 @@ export default function SubTasksArray() {
 				</FormControl>
 			))}
 			<Button
-				sx={{ alignSelf: "center", marginTop: 1.2, color: "red" }}
+				sx={{ alignSelf: "center", marginTop: 1.2, marginBottom: pxToRem(24), color: "red" }}
 				fullWidth
 				buttonType="secondary"
 				onClick={handleAdd}

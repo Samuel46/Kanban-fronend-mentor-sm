@@ -1,7 +1,5 @@
-import Button from "@common/components/button/Button";
 import { AddNewBoard } from "@component/board-details/modals";
 import { Box, Stack, Typography } from "@mui/material";
-import { pxToRem } from "src/theme/typography";
 
 export default function OnBoardingUser() {
 	return (

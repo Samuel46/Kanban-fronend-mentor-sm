@@ -78,6 +78,23 @@ const taskSlice = createSlice({
 			});
 		},
 
+		// UPDATE SUBTASKS SUCCESS
+
+		updateSubTasksSuccess(
+			state: TaskState,
+			action: {
+				type: string;
+				payload: Task;
+			}
+		) {
+			state.isLoading = false;
+			state.tasks?.forEach((task: Task, index: number) => {
+				if (task._id === action.payload._id) {
+					state.tasks[index] = action.payload;
+				}
+			});
+		},
+
 		// DELETE TASKS SUCCESS
 		deleteTasksSuccess(state, action) {
 			state.isLoading = false;
@@ -91,8 +108,15 @@ export default taskSlice.reducer;
 // THUKN
 // ----------------------------------------------
 
-const { startLoading, hasError, createTaskSuccess, getAllTasksSuccess, updateTasksSuccess, deleteTasksSuccess } =
-	taskSlice.actions;
+const {
+	startLoading,
+	hasError,
+	createTaskSuccess,
+	getAllTasksSuccess,
+	updateTasksSuccess,
+	deleteTasksSuccess,
+	updateSubTasksSuccess,
+} = taskSlice.actions;
 
 // Create task
 export const createTask =
@@ -187,6 +211,37 @@ export const updatedTask =
 			});
 		}
 	};
+
+// Update subtasks
+export const updatedSubTask = (taskId?: string, subTaskId?: string, status?: boolean) => async (dispatch: AppDispatch) => {
+	try {
+		const config = {
+			headers: {
+				"Content-Type": "application/json",
+			},
+		};
+		const { data } = await axios.patch("/update-subtask", { taskId, subTaskId, status }, config);
+
+		dispatch(updateTasksSuccess(data));
+
+		dispatch(
+			enqueueSnackbarAction({
+				message: "Subtask updated successfully!!",
+				options: { variant: "info", key: new Date().getTime() + Math.random() },
+			})
+		);
+	} catch (error) {
+		dispatch(hasError(error?.errors));
+		error?.errors?.forEach((error: { message: string }, index: number) => {
+			dispatch(
+				enqueueSnackbarAction({
+					message: error?.message || "Error deleting task",
+					options: { variant: "error", key: new Date().getTime() + Math.random() + index },
+				})
+			);
+		});
+	}
+};
 
 // Detete Task
 export const deleteTask = (id?: string) => async (dispatch: AppDispatch) => {
