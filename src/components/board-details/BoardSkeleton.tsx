@@ -1,13 +1,15 @@
-import { Box, Skeleton, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import React from "react";
-import { pxToRem } from "src/theme/typography";
+import { HEADER } from "src/config";
 import SkeletonBody from "./SkeletonBody";
+
+const SPACING = 8;
 
 export default function BoardSkeleton() {
 	return (
-		<Box sx={{ display: "grid", height: "100%", gap: 2, mt: 3 }}>
+		<Stack spacing={3} sx={{ py: `${HEADER.H_MOBILE + SPACING}px`, px: 2 }}>
 			<SkeletonBody />
 			<SkeletonBody />
-		</Box>
+		</Stack>
 	);
 }

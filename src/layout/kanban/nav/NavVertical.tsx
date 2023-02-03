@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 // config
 import { NAV } from "src/config";
 import { PATH_KANBAN } from "src/routes/path";
+import NavSkeleton from "./NavSkeleton";
 
 //
 
@@ -65,6 +66,8 @@ export default function NavVertical({ openNav, onCloseNav, handleToggle }: Props
 			<NavSwitch handleToggle={handleToggle} />
 		</Box>
 	);
+
+	if (isLoading) return <NavSkeleton />;
 
 	return (
 		<Box

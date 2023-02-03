@@ -56,7 +56,7 @@ export default function ColumnsArray() {
 						</Box>
 					</FormControl>
 
-					<RHFRadioGroup name={`columns[${index}].prioritize`} options={PRIORITIZES_OPTIONS} />
+					<RHFRadioGroup name={`columns[${index}].prioritize`} options={PRIORITIZES_OPTIONS} sx={{ mb: pxToRem(12) }} />
 				</Stack>
 			))}
 			<Button sx={{ alignSelf: "center", marginTop: 2 }} fullWidth buttonType="secondary" onClick={handleAdd}>

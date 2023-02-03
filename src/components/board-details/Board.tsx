@@ -19,20 +19,19 @@ export default function Board() {
 	const { id: currentBoardId } = query;
 
 	const { boards, isLoading } = useSelector((state: RootState) => state.board);
+	const { isLoading: taskLoading } = useSelector((state: RootState) => state.task);
 
 	// get the current board by id
 
 	const currentBoard = boards?.find((board) => board._id === currentBoardId);
 
 	useEffect(() => {
-		if (!currentBoard && boards?.length! === 0) {
+		if (!currentBoard && boards?.length === 0 && !isLoading) {
 			replace(`/kanban/new`);
-		} else if (!currentBoard && boards?.length! > 0) {
-			replace(`/kanban/${boards[0]._id}`);
 		}
-	}, [currentBoard]);
+	}, [currentBoard, currentBoardId, boards, replace]);
 
-	if (isLoading) {
+	if (isLoading || taskLoading) {
 		return <BoardSkeleton />;
 	}
 

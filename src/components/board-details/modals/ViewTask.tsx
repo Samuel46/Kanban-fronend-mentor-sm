@@ -53,6 +53,10 @@ export default function ViewTask({ task, index }: Props) {
 
 	const router = useRouter();
 
+	const completeSubtask = task.subtasks.filter((subtask) => subtask.complete === true);
+
+	console.log(completeSubtask, "completeSubtask");
+
 	const {
 		query: { id: currentBoardId },
 	} = router;
@@ -104,7 +108,7 @@ export default function ViewTask({ task, index }: Props) {
 					{task.title}
 				</Typography>
 				<Typography variant="body2" sx={{ color: theme.palette.grey[500] }}>
-					0 of {task.subtasks.length} substasks
+					{completeSubtask.length} of {task.subtasks.length} substasks
 				</Typography>
 			</Card>
 
@@ -124,7 +128,7 @@ export default function ViewTask({ task, index }: Props) {
 
 						<Stack spacing={pxToRem(25)}>
 							<Typography variant="body1" sx={{ color: theme.palette.grey[500], mb: -1 }}>
-								Subtasks (0 of {task.subtasks.length})
+								Subtasks ({completeSubtask.length} of {task.subtasks.length})
 							</Typography>
 
 							{/* Menu section */}
@@ -142,10 +146,16 @@ export default function ViewTask({ task, index }: Props) {
 
 							<form>
 								{task.subtasks.map((sub) => (
-									<CheckBoxInput label={sub.title} key={sub?._id} />
+									<CheckBoxInput
+										label={sub.title}
+										complete={sub.complete}
+										key={sub?._id}
+										subTaskId={sub._id}
+										taskId={task._id}
+									/>
 								))}
 
-								<FormControl variant="outlined" sx={{ width: "100%" }}>
+								<FormControl variant="outlined" sx={{ width: "100%", mt: pxToRem(15) }}>
 									<Label htmlFor="status">Current status</Label>
 									<TextField
 										name="status"

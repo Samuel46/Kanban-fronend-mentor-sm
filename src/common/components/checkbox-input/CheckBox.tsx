@@ -1,23 +1,33 @@
 import { Checkbox, FormControlLabel, useTheme, Box, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { updatedSubTask, updatedTask } from "@redux/slice/task";
+import { dispatch } from "@redux/store";
+import React, { useEffect, useState } from "react";
 import { pxToRem } from "src/theme/typography";
+import { useSettingsContext } from "../settings";
 
 type Props = {
 	label: string;
+	complete: boolean;
+	subTaskId?: string;
+	taskId?: string;
 };
 
-export default function CheckBox({ label }: Props) {
-	const [checked, setChecked] = useState(true);
+export default function CheckBox({ label, complete, subTaskId, taskId }: Props) {
+	const [checked, setChecked] = useState(complete);
 
 	const theme = useTheme();
 
+	const { themeMode } = useSettingsContext();
+
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		dispatch(updatedSubTask(taskId, subTaskId, event.target.checked));
 		setChecked(event.target.checked);
 	};
+
 	return (
 		<Box
 			sx={{
-				background: theme.palette.secondary.light,
+				background: theme.palette.background.neutral,
 				px: pxToRem(12),
 				borderRadius: pxToRem(4),
 				height: pxToRem(40),
@@ -26,8 +36,8 @@ export default function CheckBox({ label }: Props) {
 				mb: pxToRem(8),
 				cursor: "pointer",
 				"&:hover": {
-					backgroundColor: theme.palette.secondary.btnHover,
-					color: theme.palette.common.black,
+					backgroundColor: themeMode === "light" ? theme.palette.secondary.btnHover : "hsla(242, 48%, 58%, .24)",
+					color: themeMode === "light" ? theme.palette.common.black : theme.palette.common.white,
 				},
 			}}
 		>

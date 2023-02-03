@@ -127,7 +127,7 @@ export default function EditTask({ currentTask, handleCloseMenu }: Props) {
 				<DialogContent>
 					<Stack spacing={3}>
 						<FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-							<FormControl variant="outlined" sx={{ width: "100%" }}>
+							<FormControl variant="outlined" sx={{ width: "100%", mb: pxToRem(24) }}>
 								<Label htmlFor="title">Title</Label>
 								<RHFTextField
 									name="title"
@@ -139,7 +139,7 @@ export default function EditTask({ currentTask, handleCloseMenu }: Props) {
 								/>
 							</FormControl>
 
-							<FormControl variant="outlined" sx={{ width: "100%" }}>
+							<FormControl variant="outlined" sx={{ width: "100%", mb: pxToRem(24) }}>
 								<Label htmlFor="description">Description</Label>
 								<RHFTextField
 									autoFocus
